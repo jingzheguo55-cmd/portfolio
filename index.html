@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ebebeb" />
+    <meta name="description" content="jingjing 的个人设计作品集。" />
+    <title>jingjing — 作品集</title>
+    <link rel="preload" href="assets/fonts/monument-extended-regular.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="assets/fonts/pixelify-sans-variable.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="icon" href="assets/butterfly-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css?v=4.5" />
+    <script src="script.js?v=4.5" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="jingjing.guo，返回网站主页"><img src="assets/butterfly-mark.svg" width="60" height="52" alt="" /><span class="brand-wordmark" aria-hidden="true">jingjing.guo</span><span class="sr-only">jingjing.guo</span></a>
+      <nav class="top-nav" aria-label="主导航"><a class="nav-link is-current" data-view="home" href="#home">网站主页</a><a class="nav-link" data-view="about" href="#about">我的简历</a><a class="nav-link" data-view="archive" href="#archive">作品展示</a></nav>
+    </header>
+    <main>
+      <section class="home-view" id="home-view" aria-label="精选作品">
+        <section class="personal-intro" aria-label="设计师郭晶晶"><img class="personal-photo" src="assets/profile-original.png" alt="郭晶晶的黑白个人照片" width="1080" height="1530" /><h2>郭晶晶<span>设计</span><span class="personal-portfolio">作品　集</span></h2></section>
+        <div class="hero-lockup"><h1 class="hero-title">PORTFOLIO</h1></div>
+        <div class="cube-scene" aria-label="54 格作品魔方，可拖动旋转"><div class="cube-entry"><div class="cube-scale"><div class="cube" id="project-cube"><div class="cube-face face-front" data-face="front"></div><div class="cube-face face-right" data-face="right"></div><div class="cube-face face-back" data-face="back"></div><div class="cube-face face-left" data-face="left"></div><div class="cube-face face-top" data-face="top"></div><div class="cube-face face-bottom" data-face="bottom"></div></div></div></div></div>
+        <nav class="project-list" aria-label="精选项目，悬停可预览"><div class="project-track"></div></nav>
+        <p class="interaction-status sr-only" aria-live="polite"></p>
+      </section>
+      <section class="content-view archive-view" id="archive-view" aria-labelledby="archive-title" hidden><div class="view-heading"><h1 id="archive-title">Archive<span> / 54</span></h1><p>视觉实验与项目索引<br />SELECTED STUDIES, 2022—2026</p></div><div class="archive-filters" aria-label="作品筛选"></div><div class="archive-grid"></div></section>
+      <section class="content-view about-view" id="about-view" aria-labelledby="about-title" hidden><p class="section-index">ABOUT / 01</p><h1 id="about-title">以设计，<br />让想法成形。</h1><div class="about-columns"><p>一名 UI/UX 设计师。<br />关注体验、视觉与品牌表达，<br />让设计更贴近业务，也更贴近人。</p><div><span class="section-index">LET’S MAKE SOMETHING</span><a href="mailto:hello@linwei.studio">hello@linwei.studio ↗</a><a href="tel:+8613800000000">+86 138 0000 0000</a><p>开放项目合作 · 2026</p></div></div></section>
+      <section class="content-view project-view" id="project-view" hidden><a class="back-link" href="#home">← 返回作品集</a><div class="view-heading"><h1 class="project-title"></h1><p class="project-meta"></p></div><div class="project-gallery"></div><a class="next-project" href="#home"></a></section>
+    </main>
+  </body>
+</html>
