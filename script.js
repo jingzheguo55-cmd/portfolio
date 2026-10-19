@@ -318,25 +318,6 @@ function createArchive() {
   archive.addEventListener('focusout', (event) => {
     if (!archive.contains(event.relatedTarget)) setArchiveHighlight(null);
   });
-  const filters = document.querySelector('.archive-filters');
-  for (const project of [{ slug: 'all', title: '全部项目' }, ...projects]) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = project.title;
-    button.classList.toggle('is-active', project.slug === 'all');
-    button.setAttribute('aria-pressed', String(project.slug === 'all'));
-    button.addEventListener('click', () => {
-      setArchiveHighlight(null);
-      filters.querySelectorAll('button').forEach((filter) => {
-        filter.classList.toggle('is-active', filter === button);
-        filter.setAttribute('aria-pressed', String(filter === button));
-      });
-      archive.querySelectorAll('.archive-card').forEach((card) => {
-        card.hidden = project.slug !== 'all' && card.dataset.project !== project.slug;
-      });
-    });
-    filters.append(button);
-  }
 }
 
 function showProject(project) {
