@@ -80,7 +80,6 @@ for (const face of cube.querySelectorAll('.cube-face')) {
     group.append(link);
   }
   projectTrack.append(group);
-  group.children[2].classList.add('is-selected');
 }
 
 function clearHighlight() {
@@ -152,7 +151,6 @@ function highlightProject(link) {
   cube.classList.add('is-highlighting');
   cube.dataset.highlightCount = String(highlightedTiles.length);
   projectList.classList.add('is-highlighting');
-  projectTrack.querySelectorAll('.project-item').forEach((entry) => entry.classList.toggle('is-selected', entry === link));
   link.classList.add('is-hovered');
   statusText.textContent = `${project.title}：随机点亮 ${highlightedTiles.length} 个可见格子，展示该分类的全部图片。`;
 }
@@ -163,11 +161,12 @@ projectTrack.addEventListener('pointerover', (event) => {
   if (link && !link.classList.contains('is-hovered')) highlightProject(link);
 });
 
-projectList.addEventListener('pointerleave', () => {
-  const focusedLink = projectTrack.querySelector('.project-item:focus');
-  if (focusedLink) highlightProject(focusedLink);
-  else clearHighlight();
+projectTrack.addEventListener('pointerout', (event) => {
+  const link = event.target.closest('.project-item');
+  if (link && !link.contains(event.relatedTarget)) clearHighlight();
 });
+
+projectList.addEventListener('pointerleave', clearHighlight);
 
 projectTrack.addEventListener('focusin', (event) => {
   const link = event.target.closest('.project-item');
