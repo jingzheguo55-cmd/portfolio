@@ -34,14 +34,18 @@ let highlightVisibilityElapsed = 0;
 
 const picturePath = (picture) => typeof picture === 'string' ? picture : `assets/cube-personal/picture_${picture}.webp?v=4.8`;
 const galleryPictures = (project) => project.galleryPictures || project.pictures;
-const archiveCovers = [[1, 5, 8], [11, 13, 12], [25, 26, 19], [28, 30, 32], [37, 38, 44], [46, 47, 51]];
+const archiveCovers = [[1, 5, 6, 7, 8], [11, 12, 13, 14, 17], [19, 23, 25, 26], [28, 29, 30, 32, 33, 36], [37, 38, 41, 44], [46, 47, 48, 49, 51, 54]];
+const projectNotes = [
+  { description: '围绕课程、教学与学习任务，探索产教融合场景下的数字化体验。通过清晰的信息层级、统一的组件与视觉语言，连接平台中的不同使用场景。', services: '产品体验 / 界面设计 / 设计规范', platform: '教育数字化 · Web / 移动端' },
+  { description: '面向农业服务场景，串联农事信息、农科课堂与个人服务。以轻量清晰的界面组织内容，让信息获取和日常使用更加直观。', services: '用户体验 / APP 设计 / 视觉规范', platform: '农业服务 · 移动应用' },
+  { description: '围绕新鲜食材与日常饮食，探索微信小程序中的产品体验。将自然的色彩、亲和的视觉形象与清晰的信息组织融入界面设计。', services: '小程序设计 / 视觉表达 / 品牌延展', platform: '生鲜电商 · 微信小程序' },
+  { description: '围绕制造业务中的计划、产能与物料信息，组织复杂的业务界面。通过明确的层级与一致的视觉规则，呈现排产布序系统的多种工作场景。', services: 'B 端体验 / 系统界面 / 数据可视化', platform: '智能制造 · Web 系统' },
+  { description: '以不同的主题与传播场景为线索，探索色彩、构图和图形语言。让视觉内容在表达信息的同时，形成鲜明而连贯的识别。', services: '运营设计 / 主题视觉 / 创意表达', platform: '运营活动 · 视觉设计' },
+  { description: '关于品牌、网页与更多视觉形式的设计探索。从平面编排到数字界面，寻找适合内容与品牌气质的表达方式。', services: '品牌视觉 / 网页设计 / 平面设计', platform: '品牌传播 · 多媒介设计' },
+];
 const gallery = document.querySelector('.project-gallery');
-const thumbnails = document.querySelector('.project-thumbnails');
+const projectDialog = document.querySelector('#project-view');
 let activeGalleryProject = null;
-let galleryIndex = 0;
-let galleryScrollFrame = null;
-let galleryDrag = null;
-let lastGalleryWheel = 0;
 let archiveScrollPosition = 0;
 
 function makeImage(picture, alt, lazy = false) {
@@ -240,58 +244,60 @@ scene.addEventListener('pointercancel', stopDragging);
 scene.addEventListener('lostpointercapture', stopDragging);
 window.addEventListener('blur', stopDragging);
 
+function setArchiveHighlight(slug) {
+  const archive = document.querySelector('.archive-grid');
+  archive.classList.toggle('is-highlighting', Boolean(slug));
+  archive.querySelectorAll('.archive-card').forEach((card) => {
+    card.classList.toggle('is-group-active', card.dataset.project === slug);
+  });
+}
+
 function createArchive() {
   const archive = document.querySelector('.archive-grid');
-  const observer = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: '0px 0px 80px 0px', threshold: 0.05 }) : null;
-  for (const [projectIndex, project] of projects.entries()) {
+  let tileIndex = 0;
+  projects.forEach((project, projectIndex) => {
     const pictures = galleryPictures(project);
-    const row = document.createElement('article');
-    row.className = 'archive-project';
-    row.dataset.project = project.slug;
-    const heading = document.createElement('header');
-    heading.className = 'archive-project-heading';
-    const title = document.createElement('h2');
-    const titleLink = document.createElement('a');
-    titleLink.href = `#work/${project.slug}`;
-    titleLink.textContent = project.title;
-    const number = document.createElement('span');
-    number.textContent = String(projectIndex + 1).padStart(2, '0');
-    title.append(titleLink, number);
-    const category = document.createElement('span');
-    category.textContent = `${project.category} / ${String(pictures.length).padStart(2, '0')} IMAGES`;
-    heading.append(title, category);
-    const previews = document.createElement('div');
-    previews.className = 'archive-previews';
-    const covers = project.galleryPictures ? pictures.slice(0, 3) : archiveCovers[projectIndex];
+    const covers = project.previewPictures || (project.galleryPictures ? pictures.slice(0, 5) : archiveCovers[projectIndex]);
     covers.forEach((picture, index) => {
-      const link = document.createElement('a');
-      link.className = 'archive-preview';
-      const imageIndex = pictures.indexOf(picture);
-      link.href = `#work/${project.slug}/${imageIndex + 1}`;
-      link.setAttribute('aria-label', `查看${project.title}完整图集，预览 ${index + 1}`);
-      link.append(makeImage(picture, `${project.title}，预览 ${index + 1}`, projectIndex > 1));
-      const caption = document.createElement('span');
-      caption.className = 'archive-preview-caption';
-      const indexLabel = document.createElement('span');
-      indexLabel.textContent = String(index + 1).padStart(2, '0');
-      const action = document.createElement('span');
-      action.textContent = '查看完整项目 ↗';
-      caption.append(indexLabel, action);
-      link.append(caption);
-      previews.append(link);
+      const card = document.createElement('a');
+      card.className = 'archive-card';
+      card.dataset.project = project.slug;
+      card.href = `#work/${project.slug}`;
+      card.style.setProperty('--tile-index', String(tileIndex++));
+      card.setAttribute('aria-label', `查看${project.title}，预览 ${index + 1}，共 ${covers.length} 张`);
+      const heading = document.createElement('h2');
+      heading.className = 'archive-card-heading';
+      const title = document.createElement('span');
+      title.className = 'archive-card-title';
+      title.textContent = index === 0 ? project.title : '';
+      const number = document.createElement('span');
+      number.className = 'archive-card-number';
+      number.textContent = String(index + 1).padStart(2, '0');
+      heading.append(title, number);
+      const image = document.createElement('span');
+      image.className = 'archive-card-image';
+      image.append(makeImage(picture, `${project.title}，预览 ${index + 1}`, tileIndex > 14));
+      card.append(heading, image);
+      archive.append(card);
     });
-    row.append(heading, previews);
-    archive.append(row);
-    if (observer && !reducedMotion.matches) observer.observe(row);
-    else row.classList.add('is-visible');
-  }
+  });
+  archive.addEventListener('pointerover', (event) => {
+    if (event.pointerType === 'touch') return;
+    const card = event.target.closest('.archive-card');
+    if (card) setArchiveHighlight(card.dataset.project);
+  });
+  archive.addEventListener('pointerout', (event) => {
+    const next = event.relatedTarget?.closest?.('.archive-card');
+    setArchiveHighlight(next && archive.contains(next) ? next.dataset.project : null);
+  });
+  archive.addEventListener('pointerleave', () => setArchiveHighlight(null));
+  archive.addEventListener('focusin', (event) => {
+    const card = event.target.closest('.archive-card');
+    if (card) setArchiveHighlight(card.dataset.project);
+  });
+  archive.addEventListener('focusout', (event) => {
+    if (!archive.contains(event.relatedTarget)) setArchiveHighlight(null);
+  });
   const filters = document.querySelector('.archive-filters');
   for (const project of [{ slug: 'all', title: '全部项目' }, ...projects]) {
     const button = document.createElement('button');
@@ -300,110 +306,70 @@ function createArchive() {
     button.classList.toggle('is-active', project.slug === 'all');
     button.setAttribute('aria-pressed', String(project.slug === 'all'));
     button.addEventListener('click', () => {
+      setArchiveHighlight(null);
       filters.querySelectorAll('button').forEach((filter) => {
         filter.classList.toggle('is-active', filter === button);
         filter.setAttribute('aria-pressed', String(filter === button));
       });
-      archive.querySelectorAll('.archive-project').forEach((row) => {
-        row.hidden = project.slug !== 'all' && row.dataset.project !== project.slug;
+      archive.querySelectorAll('.archive-card').forEach((card) => {
+        card.hidden = project.slug !== 'all' && card.dataset.project !== project.slug;
       });
     });
     filters.append(button);
   }
-  document.querySelectorAll('.archive-layout button').forEach((button) => {
-    button.addEventListener('click', () => {
-      document.querySelector('#archive-view').dataset.layout = button.dataset.layout;
-      document.querySelectorAll('.archive-layout button').forEach((entry) => entry.setAttribute('aria-pressed', String(entry === button)));
-    });
-  });
 }
 
-function updateGalleryCurrent(index) {
-  if (!activeGalleryProject) return;
-  const pictures = galleryPictures(activeGalleryProject);
-  galleryIndex = Math.max(0, Math.min(index, pictures.length - 1));
-  [...gallery.children].forEach((figure, figureIndex) => figure.classList.toggle('is-current', figureIndex === galleryIndex));
-  [...thumbnails.children].forEach((button, buttonIndex) => {
-    if (buttonIndex === galleryIndex) button.setAttribute('aria-current', 'true');
-    else button.removeAttribute('aria-current');
-  });
-  document.querySelector('.gallery-count').textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(pictures.length).padStart(2, '0')}`;
-  document.querySelector('.gallery-previous').disabled = galleryIndex === 0;
-  document.querySelector('.gallery-next').disabled = galleryIndex === pictures.length - 1;
-}
-
-function selectGalleryImage(index, behavior = 'smooth') {
-  if (!activeGalleryProject) return;
-  updateGalleryCurrent(index);
-  const figure = gallery.children[galleryIndex];
-  const left = figure.offsetLeft - (gallery.clientWidth - figure.clientWidth) / 2;
-  gallery.scrollTo({ left, behavior: reducedMotion.matches ? 'instant' : behavior });
-}
-
-function nearestGalleryImage() {
-  const center = gallery.scrollLeft + gallery.clientWidth / 2;
-  let closestIndex = 0;
-  let closestDistance = Infinity;
-  [...gallery.children].forEach((figure, index) => {
-    const distance = Math.abs(figure.offsetLeft + figure.clientWidth / 2 - center);
-    if (distance < closestDistance) {
-      closestIndex = index;
-      closestDistance = distance;
-    }
-  });
-  return closestIndex;
-}
-
-function showProject(project, initialIndex = 0) {
+function showProject(project) {
   activeGalleryProject = project;
   const pictures = galleryPictures(project);
+  const projectIndex = projects.indexOf(project);
+  const notes = projectNotes[projectIndex];
+  document.querySelector('.project-index').textContent = `PROJECT ${String(projectIndex + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`;
   document.querySelector('.project-title').textContent = project.title;
-  document.querySelector('.project-meta').textContent = `${project.category} / ${String(pictures.length).padStart(2, '0')} IMAGES`;
+  document.querySelector('.project-meta').textContent = project.category;
+  document.querySelector('.project-description').textContent = project.description || notes.description;
+  document.querySelector('.project-services').textContent = project.services || notes.services;
+  document.querySelector('.project-platform').textContent = project.platform || notes.platform;
+  document.querySelector('.project-image-count').textContent = `项目作品 / ${String(pictures.length).padStart(2, '0')} IMAGES`;
   gallery.replaceChildren();
-  thumbnails.replaceChildren();
   pictures.forEach((picture, index) => {
     const figure = document.createElement('figure');
-    figure.append(makeImage(picture, `${project.title} / ${index + 1}`, Math.abs(index - initialIndex) > 1));
+    figure.append(makeImage(picture, `${project.title} / ${index + 1}`, index > 1));
     const caption = document.createElement('figcaption');
     const title = document.createElement('span');
     title.textContent = project.title;
     const number = document.createElement('span');
-    number.textContent = String(index + 1).padStart(2, '0');
+    number.textContent = `${String(index + 1).padStart(2, '0')} / ${String(pictures.length).padStart(2, '0')}`;
     caption.append(title, number);
     figure.append(caption);
     gallery.append(figure);
-    const thumbnail = document.createElement('button');
-    thumbnail.type = 'button';
-    thumbnail.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
-    thumbnail.append(makeImage(picture, ''));
-    thumbnail.addEventListener('click', () => selectGalleryImage(index));
-    thumbnails.append(thumbnail);
   });
-  const next = projects[(projects.indexOf(project) + 1) % projects.length];
+  const next = projects[(projectIndex + 1) % projects.length];
   const nextLink = document.querySelector('.next-project');
-  nextLink.textContent = '下一个项目 ↗';
   nextLink.setAttribute('aria-label', `下一个项目：${next.title}`);
   nextLink.href = `#work/${next.slug}`;
-  updateGalleryCurrent(initialIndex);
-  requestAnimationFrame(() => {
-    if (currentView === 'project' && activeGalleryProject === project) selectGalleryImage(initialIndex, 'instant');
-  });
+  if (!projectDialog.open) projectDialog.showModal();
+  document.querySelector('.project-close').focus({ preventScroll: true });
+  gallery.scrollTop = 0;
+  document.querySelector('.project-overlay-shell').scrollTop = 0;
+  document.querySelector('.project-information').scrollTop = 0;
 }
 
 function changeView() {
-  const [requestedView, slug, imageNumber] = location.hash.slice(1).split('/');
+  const [requestedView, slug] = location.hash.slice(1).split('/');
   const project = projects.find((entry) => entry.slug === slug);
   const view = requestedView === 'work' && project ? 'project' : ['archive', 'about'].includes(requestedView) ? requestedView : 'home';
   const previousView = currentView;
   if (previousView === 'archive') archiveScrollPosition = window.scrollY;
   clearHighlight();
+  setArchiveHighlight(null);
   stopDragging();
-  galleryDrag = null;
-  gallery.classList.remove('is-dragging');
   isSceneHovered = false;
   currentView = view;
   document.body.dataset.view = view;
-  for (const name of ['home', 'archive', 'about', 'project']) document.querySelector(`#${name}-view`).hidden = name !== view;
+  for (const name of ['home', 'archive', 'about']) {
+    document.querySelector(`#${name}-view`).hidden = name !== (view === 'project' ? 'archive' : view);
+  }
   document.querySelectorAll('.nav-link').forEach((link) => {
     const active = link.dataset.view === (view === 'project' ? 'archive' : view);
     link.classList.toggle('is-current', active);
@@ -411,69 +377,32 @@ function changeView() {
     else link.removeAttribute('aria-current');
   });
   if (view === 'project') {
-    const initialIndex = Math.max(0, Math.min(Math.trunc(Number(imageNumber) || 1) - 1, galleryPictures(project).length - 1));
-    showProject(project, initialIndex);
-    document.querySelector('.project-title').focus({ preventScroll: true });
+    showProject(project);
   } else {
+    if (projectDialog.open) projectDialog.close();
     activeGalleryProject = null;
+    window.scrollTo(0, view === 'archive' && previousView === 'project' ? archiveScrollPosition : 0);
   }
   document.title = view === 'project' ? `${project.title} — jingjing` : `jingjing — ${view === 'archive' ? '作品展示' : view === 'about' ? '我的简历' : '作品集'}`;
-  window.scrollTo(0, view === 'archive' && previousView === 'project' ? archiveScrollPosition : 0);
 }
 
-gallery.addEventListener('scroll', () => {
-  if (galleryScrollFrame !== null) return;
-  galleryScrollFrame = requestAnimationFrame(() => {
-    galleryScrollFrame = null;
-    if (currentView === 'project') updateGalleryCurrent(nearestGalleryImage());
-  });
-}, { passive: true });
-document.querySelector('.gallery-previous').addEventListener('click', () => selectGalleryImage(galleryIndex - 1));
-document.querySelector('.gallery-next').addEventListener('click', () => selectGalleryImage(galleryIndex + 1));
-gallery.addEventListener('wheel', (event) => {
-  if (Math.abs(event.deltaX) >= Math.abs(event.deltaY) || event.ctrlKey) return;
-  event.preventDefault();
-  if (Math.abs(event.deltaY) < 3 || performance.now() - lastGalleryWheel < 450) return;
-  lastGalleryWheel = performance.now();
-  selectGalleryImage(galleryIndex + Math.sign(event.deltaY));
-}, { passive: false });
-gallery.addEventListener('pointerdown', (event) => {
-  if (event.pointerType !== 'mouse' || event.button !== 0) return;
-  galleryDrag = { start: event.clientX, scroll: gallery.scrollLeft };
-  gallery.classList.add('is-dragging');
-  gallery.setPointerCapture(event.pointerId);
-});
-gallery.addEventListener('pointermove', (event) => {
-  if (galleryDrag) gallery.scrollLeft = galleryDrag.scroll - (event.clientX - galleryDrag.start);
-});
-function stopGalleryDrag() {
-  if (!galleryDrag) return;
-  galleryDrag = null;
-  gallery.classList.remove('is-dragging');
-  selectGalleryImage(nearestGalleryImage());
+function closeProject() {
+  location.hash = 'archive';
 }
-gallery.addEventListener('pointerup', stopGalleryDrag);
-gallery.addEventListener('pointercancel', stopGalleryDrag);
-gallery.addEventListener('lostpointercapture', stopGalleryDrag);
-window.addEventListener('blur', stopGalleryDrag);
-window.addEventListener('keydown', (event) => {
-  if (currentView !== 'project' || event.altKey || event.ctrlKey || event.metaKey) return;
-  if (event.key === 'Escape') {
-    location.hash = 'archive';
-  } else if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
-    event.preventDefault();
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? galleryPictures(activeGalleryProject).length - 1 : galleryIndex + (event.key === 'ArrowRight' ? 1 : -1);
-    selectGalleryImage(next);
-  }
+
+document.querySelector('.project-close').addEventListener('click', closeProject);
+projectDialog.addEventListener('cancel', (event) => {
+  event.preventDefault();
+  closeProject();
+});
+projectDialog.addEventListener('click', (event) => {
+  if (event.target === projectDialog) closeProject();
 });
 
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    clearHighlight();
-    if (currentView === 'project') selectGalleryImage(galleryIndex, 'instant');
-  }, 100);
+  resizeTimer = setTimeout(clearHighlight, 100);
 });
 window.addEventListener('hashchange', changeView);
 createArchive();

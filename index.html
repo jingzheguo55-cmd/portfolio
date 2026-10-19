@@ -10,8 +10,8 @@
     <link rel="preload" href="assets/fonts/pixelify-sans-variable.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="icon" href="assets/butterfly-mark.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css?v=5.0" />
-    <link rel="stylesheet" href="gallery.css?v=5.1" />
-    <script src="script.js?v=5.1" defer></script>
+    <link rel="stylesheet" href="gallery.css?v=5.2" />
+    <script src="script.js?v=5.2" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -27,18 +27,18 @@
         <p class="interaction-status sr-only" aria-live="polite"></p>
       </section>
       <section class="content-view archive-view" id="archive-view" aria-labelledby="archive-title" hidden>
-        <div class="archive-intro"><h1 id="archive-title">作品展示 <span>SELECTED WORKS / 06</span></h1><p>从界面到体验，从视觉到品牌。<br />点击任意画面，进入完整项目。</p></div>
+        <div class="archive-intro"><h1 id="archive-title">作品展示 <span>SELECTED WORKS / 06 PROJECTS</span></h1><p>从界面到体验，从视觉到品牌。<br />悬停浏览项目，点击查看完整作品。</p></div>
         <nav class="archive-filters" aria-label="作品筛选"></nav>
         <div class="archive-grid"></div>
         <footer class="archive-footer"><span>© 2026 jingjing.guo</span><a href="#home">返回主页 ↗</a></footer>
-        <div class="archive-layout" role="group" aria-label="展示方式"><button type="button" data-layout="gallery" aria-pressed="true">画廊</button><button type="button" data-layout="index" aria-pressed="false">索引</button></div>
       </section>
       <section class="content-view about-view" id="about-view" aria-labelledby="about-title" hidden><p class="section-index">ABOUT / 01</p><h1 id="about-title">以设计，<br />让想法成形。</h1><div class="about-columns"><p>一名 UI/UX 设计师。<br />关注体验、视觉与品牌表达，<br />让设计更贴近业务，也更贴近人。</p><div><span class="section-index">LET’S MAKE SOMETHING</span><a href="mailto:hello@linwei.studio">hello@linwei.studio ↗</a><a href="tel:+8613800000000">+86 138 0000 0000</a><p>开放项目合作 · 2026</p></div></div></section>
-      <section class="content-view project-view" id="project-view" aria-labelledby="project-title" hidden>
-        <div class="project-heading"><a class="back-link" href="#archive">← 全部项目</a><div><h1 class="project-title" id="project-title" tabindex="-1"></h1><p class="project-meta"></p></div><a class="next-project" href="#archive"></a></div>
-        <div class="project-gallery" role="region" aria-label="项目完整图集" tabindex="0"></div>
-        <div class="project-controls"><div class="project-pagination"><button type="button" class="gallery-previous" aria-label="上一张图片">←</button><span class="gallery-count" aria-live="polite"></span><button type="button" class="gallery-next" aria-label="下一张图片">→</button></div><nav class="project-thumbnails" aria-label="图片缩略图"></nav><span class="gallery-hint">滚动 / 拖动浏览</span></div>
-      </section>
     </main>
+    <dialog class="project-overlay" id="project-view" aria-labelledby="project-title" aria-describedby="project-description">
+      <div class="project-overlay-shell">
+        <aside class="project-information"><div><p class="project-index"></p><p class="project-meta"></p><h2 class="project-title" id="project-title"></h2><p class="project-description" id="project-description"></p><dl class="project-facts"><div><dt>设计方向</dt><dd class="project-services"></dd></div><div><dt>项目类型</dt><dd class="project-platform"></dd></div></dl></div><div class="project-information-footer"><span>jingjing.guo / SELECTED WORK</span><a class="next-project" href="#archive">下一个项目 ↗</a></div></aside>
+        <section class="project-work" aria-label="项目作品"><header class="project-work-heading"><span class="project-image-count"></span><button class="project-close" type="button" aria-label="关闭项目详情" autofocus>关闭 <span aria-hidden="true">×</span></button></header><div class="project-gallery" role="region" aria-label="项目完整图集" tabindex="0"></div></section>
+      </div>
+    </dialog>
   </body>
 </html>
