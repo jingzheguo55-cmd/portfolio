@@ -7,6 +7,7 @@ class ProjectPaperTransition {
     this.animations = [];
     this.layer = null;
     this.sources = [];
+    this.renderer = null;
   }
 
   capture(slug) {
@@ -31,11 +32,13 @@ class ProjectPaperTransition {
   }
 
   cancel() {
-    const flying = new Map();
+    const flying = this.renderer?.bounds() || new Map();
     this.layer?.querySelectorAll('.paper-sheet').forEach((sheet) => {
       flying.set(sheet.dataset.picture, this.rectangle(sheet));
     });
     this.sequence += 1;
+    this.renderer?.dispose();
+    this.renderer = null;
     this.animations.forEach((animation) => animation.cancel());
     this.animations = [];
     this.layer?.remove();
@@ -53,6 +56,11 @@ class ProjectPaperTransition {
     this.dialog.append(this.layer);
     this.dialog.classList.add('is-paper-transition');
     this.dialog.setAttribute('aria-busy', 'true');
+    try {
+      this.renderer = new ProjectPaperRenderer(this.layer);
+    } catch {
+      this.renderer = null;
+    }
   }
 
   sheet(source) {
@@ -74,6 +82,17 @@ class ProjectPaperTransition {
       transform: `translate3d(${rect.left}px, ${rect.top}px, 0) rotateY(${turn}deg) rotateZ(${angle}deg)`,
       boxShadow: `0 ${shadow}px ${shadow * 3}px rgb(30 30 25 / ${shadow ? '.16' : '0'})`,
     };
+  }
+
+  fly(source, from, to, { duration, delay, order }) {
+    const mesh = this.renderer?.animate(source, from, to, { duration, delay, order });
+    if (mesh) return mesh;
+    const sheet = this.sheet(source);
+    sheet.style.zIndex = String(order);
+    return this.animate(sheet, [
+      this.frame(from),
+      this.frame(to),
+    ], { duration, delay, easing: 'cubic-bezier(.42,0,.22,1)' });
   }
 
   visibleStack(rect, index) {
@@ -106,9 +125,9 @@ class ProjectPaperTransition {
     const information = this.dialog.querySelector('.project-information');
     const workHeading = this.dialog.querySelector('.project-work-heading');
     const jobs = [
-      this.animate(shell, [{ opacity: 0, clipPath: 'inset(0 0 16% 0)' }, { opacity: 1, clipPath: 'inset(0)' }], { duration: 700, easing: 'cubic-bezier(.2,.75,.2,1)' }),
-      this.animate(information, [{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'none' }], { duration: 650, delay: 170, easing: 'cubic-bezier(.2,.75,.2,1)' }),
-      this.animate(workHeading, [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 320 }),
+      this.animate(shell, [{ opacity: 0 }, { opacity: 1 }], { duration: 1250, easing: 'cubic-bezier(.4,0,.2,1)' }),
+      this.animate(information, [{ opacity: 0, transform: 'translateY(32px)' }, { opacity: 1, transform: 'none' }], { duration: 1200, delay: 400, easing: 'cubic-bezier(.22,1,.36,1)' }),
+      this.animate(workHeading, [{ opacity: 0 }, { opacity: 1 }], { duration: 850, delay: 500 }),
     ];
     sources.forEach((source, index) => {
       const figure = targets.find((target) => target.dataset.picture === source.picture);
@@ -117,15 +136,7 @@ class ProjectPaperTransition {
       const destination = this.rectangle(targetImage);
       if (!destination.height) destination.height = destination.width * source.rect.height / source.rect.width;
       source.card.querySelector('.archive-card-image').classList.add('paper-source-hidden');
-      const sheet = this.sheet(source);
-      sheet.style.zIndex = String(sources.length - index);
-      const direction = index % 2 ? 1 : -1;
-      const middle = this.visibleStack(destination, index);
-      jobs.push(this.animate(sheet, [
-        { ...this.frame(source.rect), offset: 0 },
-        { ...this.frame(middle, direction * (2 + index * .5), direction * 12, 14), offset: .48 },
-        { ...this.frame(destination), offset: 1 },
-      ], { duration: 900, delay: index * 45, easing: 'cubic-bezier(.2,.72,.16,1)' }));
+      jobs.push(this.fly(source, source.rect, destination, { duration: 1950, delay: index * 75, order: sources.length - index }));
     });
     await Promise.all(jobs);
     if (sequence === this.sequence) this.cancel();
@@ -143,9 +154,9 @@ class ProjectPaperTransition {
     this.createLayer();
     this.dialog.classList.add('is-paper-closing');
     const jobs = [this.animate(this.dialog.querySelector('.project-overlay-shell'), [
-      { opacity: 1, clipPath: 'inset(0)' },
-      { opacity: 0, clipPath: 'inset(0 0 12% 0)' },
-    ], { duration: 500, easing: 'cubic-bezier(.4,0,.2,1)' })];
+      { opacity: 1 },
+      { opacity: 0 },
+    ], { duration: 1050, delay: 150, easing: 'cubic-bezier(.4,0,.2,1)' })];
     sources.forEach((source, index) => {
       const figure = targets.find((target) => target.dataset.picture === source.picture);
       if (!figure) return;
@@ -153,20 +164,7 @@ class ProjectPaperTransition {
       const visible = target.top < innerHeight && target.top + target.height > 0;
       const origin = flying.get(source.picture) || (visible ? target : this.visibleStack(target, index));
       source.card.querySelector('.archive-card-image').classList.add('paper-source-hidden');
-      const sheet = this.sheet(source);
-      sheet.style.zIndex = String(index + 1);
-      const direction = index % 2 ? 1 : -1;
-      const middle = {
-        left: origin.left * .35 + source.rect.left * .65,
-        top: origin.top * .35 + source.rect.top * .65 - 24,
-        width: origin.width * .4 + source.rect.width * .6,
-        height: origin.height * .4 + source.rect.height * .6,
-      };
-      jobs.push(this.animate(sheet, [
-        { ...this.frame(origin), offset: 0 },
-        { ...this.frame(middle, direction * 5, direction * 13, 12), offset: .56 },
-        { ...this.frame(source.rect), offset: 1 },
-      ], { duration: 650, delay: (sources.length - index - 1) * 35, easing: 'cubic-bezier(.35,0,.16,1)' }));
+      jobs.push(this.fly(source, origin, source.rect, { duration: 1500, delay: (sources.length - index - 1) * 55, order: index + 1 }));
     });
     await Promise.all(jobs);
     if (sequence === this.sequence) this.cancel();
