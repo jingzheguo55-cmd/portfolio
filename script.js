@@ -90,8 +90,19 @@ function clearHighlight() {
   cube.dataset.highlightCount = '0';
   projectList.classList.remove('is-highlighting');
   cube.querySelectorAll('.is-lit').forEach((tile) => tile.classList.remove('is-lit'));
+  cube.querySelectorAll('[data-preview-picture]').forEach(restoreTileImage);
   projectTrack.querySelectorAll('.is-hovered').forEach((link) => link.classList.remove('is-hovered'));
   statusText.textContent = '';
+}
+
+function previewTileImage(tile, picture) {
+  tile.dataset.previewPicture = String(picture);
+  tile.querySelector('img').src = picturePath(picture);
+}
+
+function restoreTileImage(tile) {
+  tile.querySelector('img').src = picturePath(Number(tile.dataset.tile));
+  delete tile.dataset.previewPicture;
 }
 
 function visibleTiles() {
@@ -117,22 +128,33 @@ function keepHighlightsVisible() {
   const visible = new Set(candidates);
   const hiddenHighlights = [...cube.querySelectorAll('.is-lit')].filter((tile) => !visible.has(tile));
   if (!hiddenHighlights.length) return;
-  hiddenHighlights.forEach((tile) => tile.classList.remove('is-lit'));
   const replacements = randomTiles(candidates.filter((tile) => !tile.classList.contains('is-lit')), hiddenHighlights.length);
-  replacements.forEach((tile) => tile.classList.add('is-lit'));
+  replacements.forEach((tile, index) => {
+    const previousTile = hiddenHighlights[index];
+    previewTileImage(tile, Number(previousTile.dataset.previewPicture));
+    tile.classList.add('is-lit');
+    previousTile.classList.remove('is-lit');
+    restoreTileImage(previousTile);
+  });
 }
 
 function highlightProject(link) {
   clearHighlight();
-  const highlightedTiles = randomTiles(visibleTiles(), 7);
-  highlightedTiles.forEach((tile) => tile.classList.add('is-lit'));
+  const project = projects.find((entry) => entry.slug === link.dataset.project);
+  if (!project) return;
+  const pictures = randomTiles([...project.pictures], project.pictures.length);
+  const highlightedTiles = randomTiles(visibleTiles(), pictures.length);
+  highlightedTiles.forEach((tile, index) => {
+    previewTileImage(tile, pictures[index]);
+    tile.classList.add('is-lit');
+  });
   isHighlighting = true;
   cube.classList.add('is-highlighting');
   cube.dataset.highlightCount = String(highlightedTiles.length);
   projectList.classList.add('is-highlighting');
   projectTrack.querySelectorAll('.project-item').forEach((entry) => entry.classList.toggle('is-selected', entry === link));
   link.classList.add('is-hovered');
-  statusText.textContent = `${link.getAttribute('aria-label')}：随机点亮 ${highlightedTiles.length} 个可见格子。`;
+  statusText.textContent = `${project.title}：随机点亮 ${highlightedTiles.length} 个可见格子，展示该分类的全部图片。`;
 }
 
 projectTrack.addEventListener('pointerover', (event) => {
