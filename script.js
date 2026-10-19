@@ -33,6 +33,14 @@ let motionSpeed = 1.5;
 let highlightVisibilityElapsed = 0;
 
 const picturePath = (picture) => typeof picture === 'string' ? picture : `assets/cube-personal/picture_${picture}.webp?v=4.8`;
+const pictureSizes = [
+  [960, 780], [811, 960], [857, 960], [960, 899], [960, 712], [912, 960], [960, 820], [960, 745], [338, 290],
+  [485, 580], [876, 905], [960, 841], [960, 625], [360, 351], [359, 385], [355, 336], [260, 235], [385, 440],
+  [641, 649], [370, 344], [351, 433], [349, 341], [679, 795], [383, 360], [960, 741], [960, 648], [374, 244],
+  [960, 890], [380, 441], [960, 788], [551, 358], [960, 547], [561, 541], [395, 396], [371, 325], [369, 320],
+  [363, 375], [381, 380], [705, 786], [374, 450], [375, 355], [371, 359], [360, 345], [370, 419], [393, 465],
+  [376, 391], [960, 572], [364, 229], [370, 423], [374, 299], [303, 306], [374, 338], [361, 400], [200, 185],
+];
 const galleryPictures = (project) => project.galleryPictures || project.pictures;
 const archiveCovers = [[1, 5, 6, 7, 8], [11, 12, 13, 14, 17], [19, 23, 25, 26], [28, 29, 30, 32, 33, 36], [37, 38, 41, 44], [46, 47, 48, 49, 51, 54]];
 const projectNotes = [
@@ -45,8 +53,11 @@ const projectNotes = [
 ];
 const gallery = document.querySelector('.project-gallery');
 const projectDialog = document.querySelector('#project-view');
+const paperTransition = new ProjectPaperTransition(projectDialog, gallery, reducedMotion);
 let activeGalleryProject = null;
 let archiveScrollPosition = 0;
+let viewTransitionId = 0;
+let projectTrigger = null;
 
 function makeImage(picture, alt, lazy = false) {
   const image = document.createElement('img');
@@ -54,6 +65,10 @@ function makeImage(picture, alt, lazy = false) {
   image.alt = alt;
   image.draggable = false;
   image.decoding = 'async';
+  const dimensions = typeof picture === 'number' ? pictureSizes[picture - 1] : null;
+  if (dimensions) {
+    [image.width, image.height] = dimensions;
+  }
   if (lazy) image.loading = 'lazy';
   return image;
 }
@@ -262,6 +277,7 @@ function createArchive() {
       const card = document.createElement('a');
       card.className = 'archive-card';
       card.dataset.project = project.slug;
+      card.dataset.picture = String(picture);
       card.href = `#work/${project.slug}`;
       card.style.setProperty('--tile-index', String(tileIndex++));
       card.setAttribute('aria-label', `查看${project.title}，预览 ${index + 1}，共 ${covers.length} 张`);
@@ -285,6 +301,10 @@ function createArchive() {
     if (event.pointerType === 'touch') return;
     const card = event.target.closest('.archive-card');
     if (card) setArchiveHighlight(card.dataset.project);
+  });
+  archive.addEventListener('click', (event) => {
+    const card = event.target.closest('.archive-card');
+    if (card && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) projectTrigger = card;
   });
   archive.addEventListener('pointerout', (event) => {
     const next = event.relatedTarget?.closest?.('.archive-card');
@@ -334,6 +354,7 @@ function showProject(project) {
   gallery.replaceChildren();
   pictures.forEach((picture, index) => {
     const figure = document.createElement('figure');
+    figure.dataset.picture = String(picture);
     figure.append(makeImage(picture, `${project.title} / ${index + 1}`, index > 1));
     const caption = document.createElement('figcaption');
     const title = document.createElement('span');
@@ -355,17 +376,28 @@ function showProject(project) {
   document.querySelector('.project-information').scrollTop = 0;
 }
 
-function changeView() {
+async function changeView() {
+  const transitionId = ++viewTransitionId;
+  const scrollbarSpace = innerWidth - document.documentElement.clientWidth;
   const [requestedView, slug] = location.hash.slice(1).split('/');
   const project = projects.find((entry) => entry.slug === slug);
   const view = requestedView === 'work' && project ? 'project' : ['archive', 'about'].includes(requestedView) ? requestedView : 'home';
   const previousView = currentView;
   if (previousView === 'archive') archiveScrollPosition = window.scrollY;
+  if (view !== 'project' && projectDialog.open) {
+    await paperTransition.close();
+    if (transitionId !== viewTransitionId) return;
+    projectDialog.close();
+  } else {
+    paperTransition.cancel();
+  }
+  const sources = view === 'project' ? paperTransition.capture(project.slug) : [];
   clearHighlight();
   setArchiveHighlight(null);
   stopDragging();
   isSceneHovered = false;
   currentView = view;
+  if (view === 'project' && previousView !== 'project') document.body.style.paddingRight = `${scrollbarSpace}px`;
   document.body.dataset.view = view;
   for (const name of ['home', 'archive', 'about']) {
     document.querySelector(`#${name}-view`).hidden = name !== (view === 'project' ? 'archive' : view);
@@ -378,10 +410,13 @@ function changeView() {
   });
   if (view === 'project') {
     showProject(project);
+    await paperTransition.open(sources.length ? sources : paperTransition.capture(project.slug));
+    if (transitionId !== viewTransitionId) return;
   } else {
-    if (projectDialog.open) projectDialog.close();
+    document.body.style.paddingRight = '';
     activeGalleryProject = null;
     window.scrollTo(0, view === 'archive' && previousView === 'project' ? archiveScrollPosition : 0);
+    if (view === 'archive' && previousView === 'project' && projectTrigger?.isConnected) projectTrigger.focus({ preventScroll: true });
   }
   document.title = view === 'project' ? `${project.title} — jingjing` : `jingjing — ${view === 'archive' ? '作品展示' : view === 'about' ? '我的简历' : '作品集'}`;
 }
@@ -403,8 +438,10 @@ let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(clearHighlight, 100);
+  paperTransition.cancel();
 });
 window.addEventListener('hashchange', changeView);
+reducedMotion.addEventListener('change', () => paperTransition.cancel());
 createArchive();
 renderRotation();
 changeView();

@@ -22,11 +22,21 @@ body[data-view="project"] { overflow: hidden; }
 .archive-card.is-group-active .archive-card-number { color: var(--ink); }
 .archive-footer { display: flex; justify-content: space-between; padding-top: 90px; margin-bottom: 20px; color: #92928f; font-size: 11px; }
 .archive-footer a:hover { color: var(--ink); }
-.project-overlay { width: calc(100vw - 64px); max-width: 1800px; height: calc(100svh - 64px); max-height: none; margin: auto; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: 0 24px 100px #17171424; opacity: 0; transform: translateY(28px) scale(.985); transition: opacity .25s ease, transform .45s cubic-bezier(.2,.75,.2,1), display .25s allow-discrete, overlay .25s allow-discrete; }
+.project-overlay { width: calc(100vw - 64px); max-width: 1800px; height: calc(100svh - 64px); max-height: none; margin: auto; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: 0 24px 100px #17171424; opacity: 1; transform: none; }
 .project-overlay[open] { opacity: 1; transform: none; }
 .project-overlay::backdrop { background: #39393030; backdrop-filter: blur(7px); opacity: 0; transition: opacity .25s ease, display .25s allow-discrete, overlay .25s allow-discrete; }
 .project-overlay[open]::backdrop { opacity: 1; }
-@starting-style { .project-overlay[open] { opacity: 0; transform: translateY(28px) scale(.985); }.project-overlay[open]::backdrop { opacity: 0; } }
+@starting-style { .project-overlay[open]::backdrop { opacity: 0; } }
+.project-overlay.is-paper-transition { overflow: visible; background: transparent; box-shadow: none; }
+.project-overlay.is-paper-transition .project-overlay-shell { background: var(--paper); overflow: hidden; }
+.project-overlay.is-paper-preparing .project-overlay-shell { opacity: 0; }
+.project-overlay.is-paper-transition .project-gallery { pointer-events: none; }
+.project-overlay.is-paper-transition .project-gallery img { visibility: hidden; }
+.project-overlay.is-paper-closing::backdrop { opacity: 0; transition-duration: .75s; }
+.paper-source-hidden { visibility: hidden !important; }
+.paper-transition-layer { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 5; overflow: hidden; pointer-events: none; perspective: 1600px; }
+.paper-sheet { position: absolute; left: 0; top: 0; overflow: hidden; transform-origin: center; backface-visibility: hidden; background: var(--paper); will-change: transform, width, height; }
+.paper-sheet img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .project-overlay-shell { display: grid; grid-template-columns: minmax(260px, 29%) minmax(0, 1fr); height: 100%; }
 .project-information { display: flex; flex-direction: column; justify-content: space-between; gap: 60px; padding: clamp(28px, 3vw, 54px); overflow-y: auto; border-right: 1px solid #33332c1c; }
 .project-index { margin: 0 0 56px; color: #92928f; font-size: 10px; letter-spacing: .075em; }
