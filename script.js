@@ -1,7 +1,15 @@
 const projects = [
   { slug: 'education-cloud', title: '产教融合教育云平台', category: '教育数字化 / B端产品', pictures: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
   { slug: 'nonghuitong', title: '农惠通APP', category: '农业服务 / APP设计', pictures: [10, 11, 12, 13, 14, 15, 16, 17, 18] },
-  { slug: 'yangshan', title: '仰膳净菜微信小程序', category: '生鲜电商 / 小程序', pictures: [19, 20, 21, 22, 23, 24, 25, 26, 27] },
+  {
+    slug: 'yangshan',
+    title: '仰膳净菜微信小程序',
+    category: '生鲜电商 / 小程序',
+    pictures: [19, 20, 21, 22, 23, 24, 25, 26, 27],
+    galleryPictures: Array.from({ length: 28 }, (unused, index) => `assets/projects/yangshan/${String(index + 4).padStart(2, '0')}.webp`),
+    previewPictures: ['04', '09', '11', '12'].map((number) => `assets/projects/yangshan/${number}.webp`),
+    gallerySizes: [2599, 1638, 2031, 1080, 2002, 1298, 1080, 1200, 1407, 1200, 2480, 1080, 1080, 2200, 1200, 1080, 3312, 1407, 1080, 2082, 1080, 1080, 1080, 3301, 1200, 1407, 1080, 2062].map((height) => [1920, height]),
+  },
   { slug: 'emerson-scheduling', title: 'Emerson排产布序系统', category: '智能制造 / B端产品', pictures: [28, 29, 30, 31, 32, 33, 34, 35, 36] },
   { slug: 'operations-visual', title: '运营视觉', category: '运营设计 / 视觉表达', pictures: [37, 38, 39, 40, 41, 42, 43, 44, 45] },
   { slug: 'brand-design', title: '品牌网页和其他设计', category: '品牌 / 网页 / 其他设计', pictures: [46, 47, 48, 49, 50, 51, 52, 53, 54] },
@@ -42,6 +50,7 @@ const pictureSizes = [
   [376, 391], [960, 572], [364, 229], [370, 423], [374, 299], [303, 306], [374, 338], [361, 400], [200, 185],
 ];
 const galleryPictures = (project) => project.galleryPictures || project.pictures;
+const gallerySizes = new Map(projects.flatMap((project) => project.galleryPictures?.map((picture, index) => [picture, project.gallerySizes?.[index]]) || []));
 const archiveCovers = [[1, 5, 6, 7, 8], [11, 12, 13, 14, 17], [19, 23, 25, 26], [28, 29, 30, 32, 33, 36], [37, 38, 41, 44], [46, 47, 48, 49, 51, 54]];
 const projectNotes = [
   { description: '围绕课程、教学与学习任务，探索产教融合场景下的数字化体验。通过清晰的信息层级、统一的组件与视觉语言，连接平台中的不同使用场景。', services: '产品体验 / 界面设计 / 设计规范', platform: '教育数字化 · Web / 移动端' },
@@ -65,7 +74,7 @@ function makeImage(picture, alt, lazy = false) {
   image.alt = alt;
   image.draggable = false;
   image.decoding = 'async';
-  const dimensions = typeof picture === 'number' ? pictureSizes[picture - 1] : null;
+  const dimensions = typeof picture === 'number' ? pictureSizes[picture - 1] : gallerySizes.get(picture);
   if (dimensions) {
     [image.width, image.height] = dimensions;
   }
