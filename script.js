@@ -4,8 +4,7 @@ const projects = [
   { slug: 'yangshan', title: '仰膳净菜微信小程序', category: '生鲜电商 / 小程序', pictures: [3, 7, 9, 10, 17, 22, 24, 28, 41, 46] },
   { slug: 'emerson-scheduling', title: 'Emerson排产布序系统', category: '智能制造 / B端产品', pictures: [4, 6, 12, 16, 19, 25, 31, 35, 45] },
   { slug: 'operations-visual', title: '运营视觉', category: '运营设计 / 视觉表达', pictures: [1, 5, 13, 15, 20, 33, 37, 44, 51, 53] },
-  { slug: 'brand-design', title: '品牌平面', category: '品牌 / 平面设计', pictures: [8, 21, 29, 39] },
-  { slug: 'other-design', title: '其他设计', category: '其他 / 设计探索', pictures: [43, 47, 49] },
+  { slug: 'brand-design', title: '品牌网页和其他设计', category: '品牌 / 网页 / 其他设计', pictures: [8, 21, 29, 39, 43, 47, 49] },
 ];
 
 const cube = document.querySelector('#project-cube');
