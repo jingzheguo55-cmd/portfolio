@@ -1,10 +1,10 @@
 const projects = [
-  { slug: 'education-cloud', title: '产教融合教育云平台', category: '教育数字化 / B端产品', pictures: [14, 26, 30, 32, 34, 38, 42, 50, 52] },
-  { slug: 'nonghuitong', title: '农惠通APP', category: '农业服务 / APP设计', pictures: [2, 11, 18, 23, 27, 36, 40, 48, 54] },
-  { slug: 'yangshan', title: '仰膳净菜微信小程序', category: '生鲜电商 / 小程序', pictures: [3, 7, 9, 10, 17, 22, 24, 28, 41, 46] },
-  { slug: 'emerson-scheduling', title: 'Emerson排产布序系统', category: '智能制造 / B端产品', pictures: [4, 6, 12, 16, 19, 25, 31, 35, 45] },
-  { slug: 'operations-visual', title: '运营视觉', category: '运营设计 / 视觉表达', pictures: [1, 5, 13, 15, 20, 33, 37, 44, 51, 53] },
-  { slug: 'brand-design', title: '品牌网页和其他设计', category: '品牌 / 网页 / 其他设计', pictures: [8, 21, 29, 39, 43, 47, 49] },
+  { slug: 'education-cloud', title: '产教融合教育云平台', category: '教育数字化 / B端产品', pictures: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+  { slug: 'nonghuitong', title: '农惠通APP', category: '农业服务 / APP设计', pictures: [10, 11, 12, 13, 14, 15, 16, 17, 18] },
+  { slug: 'yangshan', title: '仰膳净菜微信小程序', category: '生鲜电商 / 小程序', pictures: [19, 20, 21, 22, 23, 24, 25, 26, 27] },
+  { slug: 'emerson-scheduling', title: 'Emerson排产布序系统', category: '智能制造 / B端产品', pictures: [28, 29, 30, 31, 32, 33, 34, 35, 36] },
+  { slug: 'operations-visual', title: '运营视觉', category: '运营设计 / 视觉表达', pictures: [37, 38, 39, 40, 41, 42, 43, 44, 45] },
+  { slug: 'brand-design', title: '品牌网页和其他设计', category: '品牌 / 网页 / 其他设计', pictures: [46, 47, 48, 49, 50, 51, 52, 53, 54] },
 ];
 
 const cube = document.querySelector('#project-cube');
@@ -32,7 +32,7 @@ let motionTime = 0;
 let motionSpeed = 1.5;
 let highlightVisibilityElapsed = 0;
 
-const picturePath = (picture) => `assets/cube/picture_${picture}.avif`;
+const picturePath = (picture) => `assets/cube-personal/picture_${picture}.webp`;
 const pictureProject = (picture) => projects.find((project) => project.pictures.includes(picture));
 
 function makeImage(picture, alt, lazy = false) {
