@@ -125,9 +125,9 @@ class ProjectPaperTransition {
     const information = this.dialog.querySelector('.project-information');
     const workHeading = this.dialog.querySelector('.project-work-heading');
     const jobs = [
-      this.animate(shell, [{ opacity: 0 }, { opacity: 1 }], { duration: 1250, easing: 'cubic-bezier(.4,0,.2,1)' }),
-      this.animate(information, [{ opacity: 0, transform: 'translateY(32px)' }, { opacity: 1, transform: 'none' }], { duration: 1200, delay: 400, easing: 'cubic-bezier(.22,1,.36,1)' }),
-      this.animate(workHeading, [{ opacity: 0 }, { opacity: 1 }], { duration: 850, delay: 500 }),
+      this.animate(shell, [{ opacity: 0 }, { opacity: 1 }], { duration: 650, easing: 'cubic-bezier(.4,0,.2,1)' }),
+      this.animate(information, [{ opacity: 0, transform: 'translateY(32px)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 175, easing: 'cubic-bezier(.22,1,.36,1)' }),
+      this.animate(workHeading, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 250 }),
     ];
     sources.forEach((source, index) => {
       const figure = targets.find((target) => target.dataset.picture === source.picture);
@@ -136,7 +136,7 @@ class ProjectPaperTransition {
       const destination = this.rectangle(targetImage);
       if (!destination.height) destination.height = destination.width * source.rect.height / source.rect.width;
       source.card.querySelector('.archive-card-image').classList.add('paper-source-hidden');
-      jobs.push(this.fly(source, source.rect, destination, { duration: 1950, delay: index * 75, order: sources.length - index }));
+      jobs.push(this.fly(source, source.rect, destination, { duration: 1000 - (sources.length - 1) * 30, delay: index * 30, order: sources.length - index }));
     });
     await Promise.all(jobs);
     if (sequence === this.sequence) this.cancel();
@@ -156,7 +156,7 @@ class ProjectPaperTransition {
     const jobs = [this.animate(this.dialog.querySelector('.project-overlay-shell'), [
       { opacity: 1 },
       { opacity: 0 },
-    ], { duration: 1050, delay: 150, easing: 'cubic-bezier(.4,0,.2,1)' })];
+    ], { duration: 650, delay: 100, easing: 'cubic-bezier(.4,0,.2,1)' })];
     sources.forEach((source, index) => {
       const figure = targets.find((target) => target.dataset.picture === source.picture);
       if (!figure) return;
@@ -164,7 +164,7 @@ class ProjectPaperTransition {
       const visible = target.top < innerHeight && target.top + target.height > 0;
       const origin = flying.get(source.picture) || (visible ? target : this.visibleStack(target, index));
       source.card.querySelector('.archive-card-image').classList.add('paper-source-hidden');
-      jobs.push(this.fly(source, origin, source.rect, { duration: 1500, delay: (sources.length - index - 1) * 55, order: index + 1 }));
+      jobs.push(this.fly(source, origin, source.rect, { duration: 1000 - (sources.length - 1) * 30, delay: (sources.length - index - 1) * 30, order: index + 1 }));
     });
     await Promise.all(jobs);
     if (sequence === this.sequence) this.cancel();

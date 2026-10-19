@@ -24,7 +24,7 @@ body[data-view="project"] { overflow: hidden; }
 .archive-footer a:hover { color: var(--ink); }
 .project-overlay { width: calc(100vw - 64px); max-width: 1800px; height: calc(100svh - 64px); max-height: none; margin: auto; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: 0 24px 100px #17171424; opacity: 1; transform: none; }
 .project-overlay[open] { opacity: 1; transform: none; }
-.project-overlay::backdrop { background: #39393030; backdrop-filter: blur(7px); opacity: 0; transition: opacity 1.1s ease, backdrop-filter 1.1s ease, display 1.1s allow-discrete, overlay 1.1s allow-discrete; }
+.project-overlay::backdrop { background: #39393030; backdrop-filter: blur(7px); opacity: 0; transition: opacity 1s ease, backdrop-filter 1s ease, display 1s allow-discrete, overlay 1s allow-discrete; }
 .project-overlay[open]::backdrop { opacity: 1; }
 @starting-style { .project-overlay[open]::backdrop { opacity: 0; } }
 .project-overlay.is-paper-transition { overflow: visible; background: transparent; box-shadow: none; }
@@ -33,7 +33,7 @@ body[data-view="project"] { overflow: hidden; }
 .project-overlay.is-paper-transition .project-gallery { pointer-events: none; }
 .project-overlay.is-paper-transition .project-gallery figure { visibility: hidden; }
 .project-overlay.is-paper-preparing::backdrop { opacity: 0; backdrop-filter: blur(0); }
-.project-overlay.is-paper-closing::backdrop { opacity: 0; backdrop-filter: blur(0); transition-duration: 1.4s; }
+.project-overlay.is-paper-closing::backdrop { opacity: 0; backdrop-filter: blur(0); transition-duration: 1s; }
 .paper-source-hidden { visibility: hidden !important; }
 .paper-transition-layer { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 5; overflow: hidden; pointer-events: none; perspective: 1600px; }
 .paper-sheet { position: absolute; left: 0; top: 0; overflow: hidden; transform-origin: center; backface-visibility: hidden; background: var(--paper); will-change: transform, width, height; }
