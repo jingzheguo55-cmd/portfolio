@@ -32,7 +32,7 @@ let motionTime = 0;
 let motionSpeed = 1.5;
 let highlightVisibilityElapsed = 0;
 
-const picturePath = (picture) => `assets/cube-personal/picture_${picture}.webp`;
+const picturePath = (picture) => `assets/cube-personal/picture_${picture}.webp?v=4.8`;
 const pictureProject = (picture) => projects.find((project) => project.pictures.includes(picture));
 
 function makeImage(picture, alt, lazy = false) {
