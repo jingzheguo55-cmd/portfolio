@@ -123,11 +123,9 @@ class ProjectPaperTransition {
     this.dialog.classList.remove('is-paper-preparing');
     const shell = this.dialog.querySelector('.project-overlay-shell');
     const information = this.dialog.querySelector('.project-information');
-    const workHeading = this.dialog.querySelector('.project-work-heading');
     const jobs = [
       this.animate(shell, [{ opacity: 0 }, { opacity: 1 }], { duration: 650, easing: 'cubic-bezier(.4,0,.2,1)' }),
       this.animate(information, [{ opacity: 0, transform: 'translateY(32px)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 175, easing: 'cubic-bezier(.22,1,.36,1)' }),
-      this.animate(workHeading, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 250 }),
     ];
     sources.forEach((source, index) => {
       const figure = targets.find((target) => target.dataset.picture === source.picture);

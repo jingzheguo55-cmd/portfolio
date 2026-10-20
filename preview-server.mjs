@@ -13,6 +13,7 @@ const contentTypes = {
   '.webp': 'image/webp',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
+  '.pdf': 'application/pdf',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
 };

@@ -44,17 +44,19 @@ button:focus-visible, a:focus-visible { outline: 1px solid var(--accent); outlin
 .home-view { position: relative; min-height: 100svh; overflow: hidden; }
 .personal-intro { position: fixed; z-index: 6; left: 3.65vw; top: 27svh; }
 .personal-photo { display: block; width: 6.5vw; height: auto; aspect-ratio: 1080 / 1530; object-fit: cover; }
+.personal-intro a { display: block; width: fit-content; color: inherit; text-decoration: none; }
+.personal-intro a:focus-visible { outline: 1px solid currentColor; outline-offset: 6px; }
 .personal-intro h2 { margin: 30px 0 0; color: var(--ink); font-size: 27px; font-weight: 500; line-height: 1.75; letter-spacing: .02em; }
 .personal-intro h2 span { display: block; }.personal-portfolio { white-space: nowrap; }
 .hero-lockup { position: fixed; z-index: 1; left: -1.5vw; top: 85.4svh; width: max-content; pointer-events: none; }
 .hero-title { margin: 0; padding: 0; color: #161210; font-family: "Monument Extended", Arial, sans-serif; font-size: 16.4vw; font-weight: 400; line-height: .82; letter-spacing: -.025em; white-space: nowrap; user-select: none; }
 .cube-scene { position: fixed; z-index: 4; left: 50%; top: 45.5%; width: var(--cube-size); height: var(--cube-size); transform: translate(-50%, -50%); perspective: 1400px; touch-action: none; cursor: grab; }.cube-scene:active { cursor: grabbing; }
-.cube-entry { width: 100%; height: 100%; transform-style: preserve-3d; }.cube-scale { width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .85s cubic-bezier(.2,.75,.2,1); }.cube-scene:has(.is-highlighting) .cube-scale { transform: scale(1.08); }
+.cube-entry { width: 100%; height: 100%; transform-style: preserve-3d; }.cube-scale { width: 100%; height: 100%; transform: scale(1); transform-style: preserve-3d; transition: transform .85s cubic-bezier(.2,.75,.2,1); }.cube-scene:has(.is-highlighting) .cube-scale { transform: scale(1.08); }
 .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transform: rotateX(-22deg) rotateY(-32deg) rotateZ(-5deg); will-change: transform; }
 .cube-face { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: var(--cube-gap); backface-visibility: hidden; transform-style: preserve-3d; }
 .face-front { transform: translateZ(var(--cube-depth)); }.face-right { transform: rotateY(90deg) translateZ(var(--cube-depth)); }.face-back { transform: rotateY(180deg) translateZ(var(--cube-depth)); }.face-left { transform: rotateY(-90deg) translateZ(var(--cube-depth)); }.face-top { transform: rotateX(90deg) translateZ(var(--cube-depth)); }.face-bottom { transform: rotateX(-90deg) translateZ(var(--cube-depth)); }
-.cube-tile { display: block; position: relative; min-width: 0; min-height: 0; backface-visibility: hidden; opacity: 1; filter: brightness(1); transition: opacity .55s ease, filter .55s ease, transform .55s ease; }.cube-tile img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
-.cube.is-highlighting .cube-tile { opacity: .1; filter: grayscale(.8) brightness(.7); }.cube.is-highlighting .cube-tile.is-lit { opacity: 1; filter: brightness(1.08) saturate(1.1); transform: translateZ(7px); }
+.cube-tile { display: block; position: relative; min-width: 0; min-height: 0; transform: translateZ(0); backface-visibility: hidden; opacity: 1; transition: opacity .55s ease, transform .55s ease; }.cube-tile img { display: block; width: 100%; height: 100%; object-fit: cover; backface-visibility: hidden; user-select: none; -webkit-user-drag: none; filter: none; transition: filter .55s ease; }
+.cube.is-highlighting .cube-tile { opacity: .1; }.cube.is-highlighting .cube-tile img { filter: grayscale(.8) brightness(.7); }.cube.is-highlighting .cube-tile.is-lit { opacity: 1; transform: translateZ(7px); }.cube.is-highlighting .cube-tile.is-lit img { filter: brightness(1.08) saturate(1.1); }
 .project-list { position: fixed; z-index: 8; top: 24.5svh; left: 75%; right: 6.5vw; }
 .project-track { width: 100%; }
 .project-group { display: flex; flex-direction: column; align-items: center; gap: 0; }

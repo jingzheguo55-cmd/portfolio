@@ -1,18 +1,80 @@
 const projects = [
-  { slug: 'education-cloud', title: '产教融合教育云平台', category: '教育数字化 / B端产品', pictures: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
-  { slug: 'nonghuitong', title: '农惠通APP', category: '农业服务 / APP设计', pictures: [10, 11, 12, 13, 14, 15, 16, 17, 18] },
+  {
+    slug: 'education-cloud',
+    title: '产教融合教育云平台',
+    detailTitle: '产教融合教育云平台1.0 & 2.0',
+    keywords: ['产教融合', '用户研究', '信息架构', '组件系统', '设计评审', '多端体验'],
+    period: '2021.04–2024.01',
+    description: '产教融合教育云平台有PC端和welink小程序端，是以满足社会数字人才需求为宗旨，以促进学生就业和技能提升为目的，面向高校提供教、学、练、测、评、管全流程服务，是OBE教学理念与信息技术手段有机融合。',
+    responsibilities: '我负责平台的UI和UX设计，从0到1协助产品经理和用户代表完成市场调查、用户研究、用户使用场景分析等，根据目标人群及特征，深挖用户痛点需求；与前端开发参与竞品分析和重构架构调整，搭建变体组件库；日常组织各级各岗位同事参与设计评审，收集一线用户实际使用体验，通过创新方法解决设计问题。',
+    category: '教育数字化 / B端产品',
+    pictures: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    galleryPictures: Array.from({ length: 21 }, (unused, index) => `assets/projects/education/${String(index + 4).padStart(2, '0')}.webp`),
+    previewPictures: ['04', '05', '10', '16', '24'].map((number) => `assets/projects/education/${number}.webp`),
+    gallerySizes: [2404, 2056, 4006, 2424, 3619, 2291, 2458, 1493, 1080, 1698, 1493, 1200, 1200, 1200, 1200, 1200, 2246, 1200, 1428, 1200, 1080].map((height, index) => [index < 9 ? 1928 : index < 20 ? 1924 : 1920, height]),
+  },
+  {
+    slug: 'nonghuitong',
+    title: '农惠通APP',
+    detailTitle: '农惠通移动端',
+    keywords: ['农民新农具', '助农服务', 'UI/UX设计', '品牌标识', '客户共创', '研发协同'],
+    period: '2023.05–2023.09',
+    description: '农惠通是阳江市重点建设的农民“新农具”，平台围绕“助农、为农、富农”为总目标进行规划和设计。',
+    responsibilities: '我负责农惠通移动端UIUX设计、logo、后端操作系统设计。前期和产品经理、项目经理赶赴广州和阳江的客户现场，和客户代表多次沟通了解需求，出多版设计Demo和客户方相关人员讨论，直至产品主视觉风格确定，核心页面的交互和视觉稿。在研发阶段需求出现变动，及时跟进解决各种设计问题。',
+    category: '农业服务 / APP设计',
+    pictures: [10, 11, 12, 13, 14, 15, 16, 17, 18],
+    galleryPictures: ['33', '34', '35', '36', '37', '38', '40', '41', '42', '43', '44'].map((number) => `assets/projects/nonghuitong/${number}.webp`),
+    previewPictures: ['34', '35', '33', '40', '42'].map((number) => `assets/projects/nonghuitong/${number}.webp`),
+    gallerySizes: [1080, 2056, 1080, 1080, 1780, 1080, 3248, 1080, 1200, 1080, 2738].map((height) => [1920, height]),
+  },
   {
     slug: 'yangshan',
     title: '仰膳净菜微信小程序',
+    detailTitle: '仰膳净菜小程序',
+    keywords: ['健康饮食', '个性化净菜', '小程序设计', '交互原型', '设计规范', '品牌运营'],
+    period: '2025.05–2026.05',
+    description: '面向家庭健康饮食场景，为不同成员提供个性化净菜购买与膳食建议服务。',
+    responsibilities: '我负责仰膳净菜微信小程序设计和部分模块原型设计工作；和产品分析构思产品设计，优化交互流程。制定产品的整体视觉风格，并随着项目沉淀输出UI设计规范；负责品牌运营设计、logo设计等。',
     category: '生鲜电商 / 小程序',
     pictures: [19, 20, 21, 22, 23, 24, 25, 26, 27],
     galleryPictures: Array.from({ length: 28 }, (unused, index) => `assets/projects/yangshan/${String(index + 4).padStart(2, '0')}.webp`),
-    previewPictures: ['04', '09', '11', '12'].map((number) => `assets/projects/yangshan/${number}.webp`),
+    previewPictures: ['04', '09', '12', '18', '11'].map((number) => `assets/projects/yangshan/${number}.webp`),
     gallerySizes: [2599, 1638, 2031, 1080, 2002, 1298, 1080, 1200, 1407, 1200, 2480, 1080, 1080, 2200, 1200, 1080, 3312, 1407, 1080, 2082, 1080, 1080, 1080, 3301, 1200, 1407, 1080, 2062].map((height) => [1920, height]),
   },
-  { slug: 'emerson-scheduling', title: 'Emerson排产布序系统', category: '智能制造 / B端产品', pictures: [28, 29, 30, 31, 32, 33, 34, 35, 36] },
-  { slug: 'operations-visual', title: '运营视觉', category: '运营设计 / 视觉表达', pictures: [37, 38, 39, 40, 41, 42, 43, 44, 45] },
-  { slug: 'brand-design', title: '品牌网页和其他设计', category: '品牌 / 网页 / 其他设计', pictures: [46, 47, 48, 49, 50, 51, 52, 53, 54] },
+  {
+    slug: 'emerson-scheduling',
+    title: 'Emerson排产布序系统',
+    detailTitle: '艾默生调度系统',
+    keywords: ['生产管理', '资源优化', '任务调度', '系统UI设计', '组件库搭建', '高效交付'],
+    period: '2023.11–2024.01',
+    description: '艾默生调度系统是面向生产资源优化配置与任务调度的乙方项目，旨在提升生产管理效率。',
+    responsibilities: '在项目中担任UI设计师，负责整体UI设计及组件库搭建工作。在紧张的项目周期内，高效完成90余页面的设计任务，设计方案获得客户高度认可，有效保障了项目进度与交付质量。',
+    category: '智能制造 / B端产品',
+    pictures: [28, 29, 30, 31, 32, 33, 34, 35, 36],
+    galleryPictures: Array.from({ length: 10 }, (unused, index) => `assets/projects/emerson/${index + 46}.webp`),
+    previewPictures: ['46', '48', '50', '51'].map((number) => `assets/projects/emerson/${number}.webp`),
+    gallerySizes: [4024, 3390, 2144, 2529, 2749, 3668, 4302, 2354, 2394, 3433].map((height) => [1920, height]),
+  },
+  {
+    slug: 'operations-visual',
+    title: '运营视觉',
+    keywords: ['运营设计', '主题视觉', '色彩构图', '图形语言', '视觉识别'],
+    category: '运营设计 / 视觉表达',
+    pictures: [37, 38, 39, 40, 41, 42, 43, 44, 45],
+    galleryPictures: Array.from({ length: 7 }, (unused, index) => `assets/projects/operations/${index + 59}.webp`),
+    previewPictures: ['59', '62', '63', '65'].map((number) => `assets/projects/operations/${number}.webp`),
+    gallerySizes: [1407, 1080, 3086, 1080, 1407, 1080, 1080].map((height) => [1920, height]),
+  },
+  {
+    slug: 'brand-design',
+    title: '品牌网页和其他设计',
+    keywords: ['品牌设计', '网页设计', '平面编排', '数字界面', '多媒介表达'],
+    category: '品牌 / 网页 / 其他设计',
+    pictures: [46, 47, 48, 49, 50, 51, 52, 53, 54],
+    galleryPictures: ['05', '57', '58', '66', '67', '68', '69', '70', '71', '72', '73'].map((number) => `assets/projects/other/${number}.webp`),
+    previewPictures: ['58', '05', '73'].map((number) => `assets/projects/other/${number}.webp`),
+    gallerySizes: [1638, 1080, 4436, 1550, 2094, 1816, 1080, 2634, 1741, 1080, 1174].map((height) => [1920, height]),
+  },
 ];
 
 const cube = document.querySelector('#project-cube');
@@ -22,6 +84,11 @@ const projectList = document.querySelector('.project-list');
 const projectTrack = document.querySelector('.project-track');
 const statusText = document.querySelector('.interaction-status');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const archiveWelcome = new window.ArchiveWelcome(document.querySelector('.archive-welcome'), reducedMotion);
+const resumeView = document.querySelector('#about-view');
+const resumeRevealTargets = [...resumeView.querySelectorAll('.resume-toolbar, .resume-name, .resume-introduction, .resume-profile, .resume-section-label, .resume-capability-list article, .resume-job, .resume-education-list article, .resume-footer')];
+let resumeRevealObserver = null;
+let resumeRevealFrame = 0;
 const faceDefinitions = {
   front: { start: 37, normal: [0, 0, 1] },
   right: { start: 1, normal: [1, 0, 0] },
@@ -52,6 +119,7 @@ const pictureSizes = [
 const galleryPictures = (project) => project.galleryPictures || project.pictures;
 const gallerySizes = new Map(projects.flatMap((project) => project.galleryPictures?.map((picture, index) => [picture, project.gallerySizes?.[index]]) || []));
 const archiveCovers = [[1, 5, 6, 7, 8], [11, 12, 13, 14, 17], [19, 23, 25, 26], [28, 29, 30, 32, 33, 36], [37, 38, 41, 44], [46, 47, 48, 49, 51, 54]];
+const archiveProjects = ['yangshan', 'nonghuitong', 'emerson-scheduling', 'education-cloud', 'operations-visual', 'brand-design'].map((slug) => projects.find((project) => project.slug === slug));
 const projectNotes = [
   { description: '围绕课程、教学与学习任务，探索产教融合场景下的数字化体验。通过清晰的信息层级、统一的组件与视觉语言，连接平台中的不同使用场景。', services: '产品体验 / 界面设计 / 设计规范', platform: '教育数字化 · Web / 移动端' },
   { description: '面向农业服务场景，串联农事信息、农科课堂与个人服务。以轻量清晰的界面组织内容，让信息获取和日常使用更加直观。', services: '用户体验 / APP 设计 / 视觉规范', platform: '农业服务 · 移动应用' },
@@ -228,9 +296,9 @@ function animateCube(timestamp) {
     motionSpeed += (targetSpeed - motionSpeed) * (1 - Math.exp(-elapsed * 5));
     const motionElapsed = elapsed * motionSpeed;
     motionTime += motionElapsed;
-    rotation.pitch = (rotation.pitch + motionElapsed * (4 + Math.sin(motionTime * 0.24) * 7)) % 360;
-    rotation.yaw = (rotation.yaw + motionElapsed * (11 + Math.sin(motionTime * 0.18 + 0.5) * 4)) % 360;
-    rotation.roll = (rotation.roll + motionElapsed * Math.cos(motionTime * 0.28 + 0.9) * 2.5) % 360;
+    rotation.pitch += motionElapsed * (4 + Math.sin(motionTime * 0.24) * 7);
+    rotation.yaw += motionElapsed * (11 + Math.sin(motionTime * 0.18 + 0.5) * 4);
+    rotation.roll += motionElapsed * Math.cos(motionTime * 0.28 + 0.9) * 2.5;
     renderRotation();
     if (isHighlighting) {
       highlightVisibilityElapsed += elapsed;
@@ -240,6 +308,7 @@ function animateCube(timestamp) {
       }
     }
   }
+  archiveWelcome.tick(timestamp, currentView === 'archive' && !document.hidden);
   requestAnimationFrame(animateCube);
 }
 
@@ -267,6 +336,14 @@ scene.addEventListener('pointerup', stopDragging);
 scene.addEventListener('pointercancel', stopDragging);
 scene.addEventListener('lostpointercapture', stopDragging);
 window.addEventListener('blur', stopDragging);
+window.addEventListener('focus', () => { lastFrameTime = 0; });
+document.addEventListener('visibilitychange', () => {
+  lastFrameTime = 0;
+  if (document.hidden) {
+    stopDragging();
+    isSceneHovered = false;
+  }
+});
 
 function setArchiveHighlight(slug) {
   const archive = document.querySelector('.archive-grid');
@@ -279,7 +356,8 @@ function setArchiveHighlight(slug) {
 function createArchive() {
   const archive = document.querySelector('.archive-grid');
   let tileIndex = 0;
-  projects.forEach((project, projectIndex) => {
+  archiveProjects.forEach((project) => {
+    const projectIndex = projects.indexOf(project);
     const pictures = galleryPictures(project);
     const covers = project.previewPictures || (project.galleryPictures ? pictures.slice(0, 5) : archiveCovers[projectIndex]);
     covers.forEach((picture, index) => {
@@ -295,6 +373,7 @@ function createArchive() {
       const title = document.createElement('span');
       title.className = 'archive-card-title';
       title.textContent = index === 0 ? project.title : '';
+      if (index === 0) title.title = project.title;
       const number = document.createElement('span');
       number.className = 'archive-card-number';
       number.textContent = String(index + 1).padStart(2, '0');
@@ -334,36 +413,79 @@ function showProject(project) {
   const pictures = galleryPictures(project);
   const projectIndex = projects.indexOf(project);
   const notes = projectNotes[projectIndex];
-  document.querySelector('.project-index').textContent = `PROJECT ${String(projectIndex + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`;
-  document.querySelector('.project-title').textContent = project.title;
-  document.querySelector('.project-meta').textContent = project.category;
-  document.querySelector('.project-description').textContent = project.description || notes.description;
-  document.querySelector('.project-services').textContent = project.services || notes.services;
-  document.querySelector('.project-platform').textContent = project.platform || notes.platform;
-  document.querySelector('.project-image-count').textContent = `项目作品 / ${String(pictures.length).padStart(2, '0')} IMAGES`;
+  document.querySelector('.project-title').textContent = project.detailTitle || project.title;
+  const keywords = document.querySelector('.project-keywords');
+  keywords.replaceChildren();
+  keywords.hidden = !project.keywords?.length;
+  project.keywords?.forEach((keyword) => {
+    const item = document.createElement('li');
+    item.textContent = keyword;
+    keywords.append(item);
+  });
+  const description = document.querySelector('.project-description');
+  description.replaceChildren();
+  if (project.period) {
+    const period = document.createElement('p');
+    period.className = 'project-period';
+    period.textContent = project.period;
+    description.append(period);
+  }
+  const sections = project.responsibilities
+    ? [['项目概述', project.description], ['我的职责', project.responsibilities]]
+    : [[null, project.description || notes.description]];
+  sections.forEach(([label, content]) => {
+    const section = document.createElement('section');
+    if (label) {
+      const heading = document.createElement('h3');
+      heading.textContent = label;
+      section.append(heading);
+    }
+    const paragraph = document.createElement('p');
+    paragraph.textContent = content;
+    section.append(paragraph);
+    description.append(section);
+  });
   gallery.replaceChildren();
   pictures.forEach((picture, index) => {
     const figure = document.createElement('figure');
     figure.dataset.picture = String(picture);
     figure.append(makeImage(picture, `${project.title} / ${index + 1}`, index > 1));
-    const caption = document.createElement('figcaption');
-    const title = document.createElement('span');
-    title.textContent = project.title;
-    const number = document.createElement('span');
-    number.textContent = `${String(index + 1).padStart(2, '0')} / ${String(pictures.length).padStart(2, '0')}`;
-    caption.append(title, number);
-    figure.append(caption);
     gallery.append(figure);
   });
-  const next = projects[(projectIndex + 1) % projects.length];
+  const next = archiveProjects[(archiveProjects.indexOf(project) + 1) % archiveProjects.length];
   const nextLink = document.querySelector('.next-project');
   nextLink.setAttribute('aria-label', `下一个项目：${next.title}`);
   nextLink.href = `#work/${next.slug}`;
   if (!projectDialog.open) projectDialog.showModal();
-  document.querySelector('.project-close').focus({ preventScroll: true });
+  gallery.focus({ preventScroll: true });
   gallery.scrollTop = 0;
   document.querySelector('.project-overlay-shell').scrollTop = 0;
   document.querySelector('.project-information').scrollTop = 0;
+}
+
+function updateResumeMotion(view) {
+  resumeRevealObserver?.disconnect();
+  cancelAnimationFrame(resumeRevealFrame);
+  resumeRevealObserver = null;
+  resumeRevealFrame = 0;
+  resumeView.classList.remove('is-motion-ready');
+  resumeRevealTargets.forEach((target) => {
+    target.classList.add('resume-reveal');
+    target.classList.remove('is-revealed');
+  });
+  if (view !== 'about' || reducedMotion.matches || !('IntersectionObserver' in window)) return;
+  resumeView.classList.add('is-motion-ready');
+  resumeRevealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-revealed');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -32px 0px' });
+  resumeRevealFrame = requestAnimationFrame(() => {
+    resumeRevealFrame = 0;
+    resumeRevealTargets.forEach((target) => resumeRevealObserver.observe(target));
+  });
 }
 
 async function changeView() {
@@ -386,9 +508,11 @@ async function changeView() {
   setArchiveHighlight(null);
   stopDragging();
   isSceneHovered = false;
+  lastFrameTime = 0;
   currentView = view;
   if (view === 'project' && previousView !== 'project') document.body.style.paddingRight = `${scrollbarSpace}px`;
   document.body.dataset.view = view;
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', view === 'about' ? '#ebebeb' : '#0A0A0A');
   for (const name of ['home', 'archive', 'about']) {
     document.querySelector(`#${name}-view`).hidden = name !== (view === 'project' ? 'archive' : view);
   }
@@ -409,13 +533,15 @@ async function changeView() {
     if (view === 'archive' && previousView === 'project' && projectTrigger?.isConnected) projectTrigger.focus({ preventScroll: true });
   }
   document.title = view === 'project' ? `${project.title} — jingjing` : `jingjing — ${view === 'archive' ? '作品展示' : view === 'about' ? '我的简历' : '作品集'}`;
+  updateResumeMotion(view);
+  if (view === 'archive') archiveWelcome.resize();
 }
 
 function closeProject() {
   location.hash = 'archive';
 }
 
-document.querySelector('.project-close').addEventListener('click', closeProject);
+document.querySelectorAll('.project-dismiss, .project-mobile-close').forEach((button) => button.addEventListener('click', closeProject));
 projectDialog.addEventListener('cancel', (event) => {
   event.preventDefault();
   closeProject();
@@ -431,7 +557,11 @@ window.addEventListener('resize', () => {
   paperTransition.cancel();
 });
 window.addEventListener('hashchange', changeView);
-reducedMotion.addEventListener('change', () => paperTransition.cancel());
+reducedMotion.addEventListener('change', () => {
+  paperTransition.cancel();
+  updateResumeMotion(currentView);
+  archiveWelcome.resize();
+});
 createArchive();
 renderRotation();
 changeView();
