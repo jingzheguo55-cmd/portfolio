@@ -107,7 +107,7 @@ let motionTime = 0;
 let motionSpeed = 1.5;
 let highlightVisibilityElapsed = 0;
 
-const picturePath = (picture) => typeof picture === 'string' ? picture : `assets/cube-personal/picture_${picture}.webp?v=4.8`;
+const picturePath = (picture) => typeof picture === 'string' ? picture : `assets/cube-personal/picture_${picture}.webp?v=8.0`;
 const pictureSizes = [
   [960, 780], [811, 960], [857, 960], [960, 899], [960, 712], [912, 960], [960, 820], [960, 745], [338, 290],
   [485, 580], [876, 905], [960, 841], [960, 625], [360, 351], [359, 385], [355, 336], [260, 235], [385, 440],
@@ -136,9 +136,11 @@ let archiveScrollPosition = 0;
 let viewTransitionId = 0;
 let projectTrigger = null;
 
-function makeImage(picture, alt, lazy = false) {
+function makeImage(picture, alt, lazy = false, source = picturePath(picture)) {
   const image = document.createElement('img');
-  image.src = picturePath(picture);
+  image.loading = lazy ? 'lazy' : 'eager';
+  image.fetchPriority = lazy ? 'low' : 'auto';
+  image.src = source;
   image.alt = alt;
   image.draggable = false;
   image.decoding = 'async';
@@ -146,18 +148,23 @@ function makeImage(picture, alt, lazy = false) {
   if (dimensions) {
     [image.width, image.height] = dimensions;
   }
-  if (lazy) image.loading = 'lazy';
   return image;
 }
 
-for (const face of cube.querySelectorAll('.cube-face')) {
-  const definition = faceDefinitions[face.dataset.face];
-  for (let cellIndex = 0; cellIndex < 9; cellIndex += 1) {
-    const tile = document.createElement('span');
-    tile.className = 'cube-tile';
-    tile.dataset.tile = String(definition.start + cellIndex);
-    tile.append(makeImage(definition.start + cellIndex, ''));
-    face.append(tile);
+function createCube() {
+  if (cube.dataset.ready) return;
+  cube.dataset.ready = 'true';
+  for (const face of cube.querySelectorAll('.cube-face')) {
+    const definition = faceDefinitions[face.dataset.face];
+    for (let cellIndex = 0; cellIndex < 9; cellIndex += 1) {
+      const tile = document.createElement('span');
+      tile.className = 'cube-tile';
+      tile.dataset.tile = String(definition.start + cellIndex);
+      const image = makeImage(definition.start + cellIndex, '');
+      image.fetchPriority = ['front', 'right', 'top'].includes(face.dataset.face) ? 'high' : 'low';
+      tile.append(image);
+      face.append(tile);
+    }
   }
 }
 
@@ -355,6 +362,7 @@ function setArchiveHighlight(slug) {
 
 function createArchive() {
   const archive = document.querySelector('.archive-grid');
+  if (archive.childElementCount) return;
   let tileIndex = 0;
   archiveProjects.forEach((project) => {
     const projectIndex = projects.indexOf(project);
@@ -380,7 +388,8 @@ function createArchive() {
       heading.append(title, number);
       const image = document.createElement('span');
       image.className = 'archive-card-image';
-      image.append(makeImage(picture, `${project.title}，预览 ${index + 1}`, tileIndex > 14));
+      const preview = typeof picture === 'string' ? `assets/previews/${project.slug}/${picture.split('/').pop()}` : picturePath(picture);
+      image.append(makeImage(picture, `${project.title}，预览 ${index + 1}`, tileIndex > 7, preview));
       card.append(heading, image);
       archive.append(card);
     });
@@ -449,7 +458,7 @@ function showProject(project) {
   pictures.forEach((picture, index) => {
     const figure = document.createElement('figure');
     figure.dataset.picture = String(picture);
-    figure.append(makeImage(picture, `${project.title} / ${index + 1}`, index > 1));
+    figure.append(makeImage(picture, `${project.title} / ${index + 1}`, index > 0));
     gallery.append(figure);
   });
   const next = archiveProjects[(archiveProjects.indexOf(project) + 1) % archiveProjects.length];
@@ -503,6 +512,8 @@ async function changeView() {
   } else {
     paperTransition.cancel();
   }
+  if (view === 'home') createCube();
+  if (view === 'archive' || view === 'project') createArchive();
   const sources = view === 'project' ? paperTransition.capture(project.slug) : [];
   clearHighlight();
   setArchiveHighlight(null);
@@ -562,7 +573,6 @@ reducedMotion.addEventListener('change', () => {
   updateResumeMotion(currentView);
   archiveWelcome.resize();
 });
-createArchive();
 renderRotation();
 changeView();
 requestAnimationFrame(animateCube);
